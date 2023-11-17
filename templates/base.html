@@ -1,0 +1,238 @@
+{% load static %}
+{% load crispy_forms_tags %}
+{% load extra_tag %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head><base href=""/>
+		<title>SITAMPAN</title>
+		<meta charset="utf-8" />
+		<meta name="description" content="SITAMPAN" />
+		<meta name="keywords" content="MBKM, SITAMPAN, UNTAD, TADULAKO, MERDEKA-BELAJAR, MERDEKA BELAJAR" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+		<link rel="shortcut icon" href="{% static 'media/logos/icon.png' %}" />
+
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+		<!-- <link href="{% static 'plugins/custom/datatables/datatables.bundle.css' %}" rel="stylesheet" type="text/css" /> -->
+		<script src=" {% static 'datatables/jquery.min.js' %} "></script>
+		<script src=" {% static 'datatables/datatables-demo.js' %} "></script>
+		<link href="{% static 'datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+		<!-- <link href="{% static 'datatables/jquery.dataTables.min.js' %}" rel="stylesheet" type="text/css" /> -->
+		
+		<link href="{% static 'plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+		<style>
+			.chart-container {
+			position: relative;
+			margin: auto;
+			height: 400px;
+			width: 80%;
+			}
+
+			canvas {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			}
+			label.custom-file-label[for="id_dokumentasi"] {
+				display: none;
+			}
+			label.custom-file-label[for="id_unggah_laporan"] {
+				display: none;
+			}
+			div.custom-file {
+				padding:0;
+			}
+		</style>
+	</head>
+	<body id="kt_app_body" data-kt-app-layout="dark-sidebar" data-kt-app-header-fixed="true" data-kt-app-sidebar-enabled="true" data-kt-app-sidebar-fixed="true" data-kt-app-sidebar-hoverable="true" data-kt-app-sidebar-push-header="true" data-kt-app-sidebar-push-toolbar="true" data-kt-app-sidebar-push-footer="true" data-kt-app-toolbar-enabled="true" class="app-default">
+		<script src="{% static 'plugins/global/plugins.bundle.js' %}"></script>
+		<script src="{% static 'js/scripts.bundle.js' %}"></script>
+		<script src="{% static 'datatables/jquery.dataTables.min.js' %}"></script>
+		<script src="{% static 'datatables/dataTables.bootstrap4.min.js' %}"></script>
+		<script src="{% static 'js/xlsx.full.min.js' }"></script>
+		
+		<script>var defaultThemeMode = "light"; var themeMode; if ( document.documentElement ) { if ( document.documentElement.hasAttribute("data-theme-mode")) { themeMode = document.documentElement.getAttribute("data-theme-mode"); } else { if ( localStorage.getItem("data-theme") !== null ) { themeMode = localStorage.getItem("data-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-theme", themeMode); }
+		</script>
+		
+		<!--begin::App-->
+		<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+			<!--begin::Page-->
+			<div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+				<!--begin::Header-->
+				{% include 'header.html' %}
+				<!--end::Header-->
+
+				<!--begin::Wrapper-->
+				<div class="app-wrapper flex-column flex-row-fluid" id="kt_app_wrapper">
+					<!--begin::Sidebar-->
+					<div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true" data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="225px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle">
+						<div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
+							<a href="#">
+								<img alt="Logo" src="{% static 'icon_atas.png' %}" class="h-30px app-sidebar-logo-default" />
+								<img alt="Logo" src="{% static 'media/logos/icon_untad.png' %}" class="h-25px app-sidebar-logo-minimize" />
+							</a>
+							<div id="kt_app_sidebar_toggle" class="app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary body-bg h-30px w-30px position-absolute top-50 start-100 translate-middle rotate" data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body" data-kt-toggle-name="app-sidebar-minimize">
+								<span class="svg-icon svg-icon-2 rotate-180">
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+										<path opacity="0.5" d="M14.2657 11.4343L18.45 7.25C18.8642 6.83579 18.8642 6.16421 18.45 5.75C18.0358 5.33579 17.3642 5.33579 16.95 5.75L11.4071 11.2929C11.0166 11.6834 11.0166 12.3166 11.4071 12.7071L16.95 18.25C17.3642 18.6642 18.0358 18.6642 18.45 18.25C18.8642 17.8358 18.8642 17.1642 18.45 16.75L14.2657 12.5657C13.9533 12.2533 13.9533 11.7467 14.2657 11.4343Z" fill="currentColor" />
+										<path d="M8.2657 11.4343L12.45 7.25C12.8642 6.83579 12.8642 6.16421 12.45 5.75C12.0358 5.33579 11.3642 5.33579 10.95 5.75L5.40712 11.2929C5.01659 11.6834 5.01659 12.3166 5.40712 12.7071L10.95 18.25C11.3642 18.6642 12.0358 18.6642 12.45 18.25C12.8642 17.8358 12.8642 17.1642 12.45 16.75L8.2657 12.5657C7.95328 12.2533 7.95328 11.7467 8.2657 11.4343Z" fill="currentColor" />
+									</svg>
+								</span>
+							</div>
+						</div>
+						<!--end::Logo-->
+						
+						<!--begin::sidebar menu-->
+						<div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+							<div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper hover-scroll-overlay-y my-5" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer" data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px" data-kt-scroll-save-state="true">
+								<!--begin::Menu sidebar -->
+									{% include 'sidebar_admin.html' %}
+								<!--end::Menu-->
+							</div>
+						</div>
+						<!--end::sidebar menu-->
+						<!--begin::Footer-->
+						<div class="app-sidebar-footer flex-column-auto pt-2 pb-6 px-6" id="kt_app_sidebar_footer">
+							<a href="https://mbkm.untad.ac.id" class="btn btn-flex flex-center btn-custom btn-primary overflow-hidden text-nowrap px-0 h-40px w-100" data-bs-toggle="tooltip" data-bs-trigger="hover" data-bs-dismiss-="click" title="Kunjungi Kami" target="_blank">
+								<span class="btn-label">Kunjungi Kami</span>
+								<span class="svg-icon btn-icon svg-icon-2 m-0">
+									<i class="bi bi-globe fs-1"></i>
+								</span>
+							</a>
+						</div>
+					</div>
+					<!--end::Sidebar-->
+
+					<!--begin::Main-->
+					<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+						<div class="d-flex flex-column flex-column-fluid">
+							
+							<!--begin::Content-->
+							{% block content %}{% endblock content %}
+							
+						</div>
+						
+						<div id="kt_app_footer" class="app-footer">
+							<div class="app-container container-fluid d-flex flex-column flex-md-row flex-center flex-md-stack py-3">
+								<div class="text-dark order-2 order-md-1">
+									<span class="text-muted fw-semibold me-1">2022 &copy;</span>
+									<a href="https://mbkm.untad.ac.id" target="_blank" class="text-gray-800 text-hover-primary">MBKM Universitas Tadulako</a>
+								</div>
+								<ul class="menu menu-gray-600 menu-hover-primary fw-semibold order-1">
+									<li class="menu-item">
+										<a href="https://wa.me/+6285161055918" target="_blank" class="menu-link px-2"><i class="bi bi-whatsapp fs-1 text-success"></i></a>
+									</li>
+									<li class="menu-item">
+										<a href="https://www.facebook.com/people/Mbkm-Untad/100081965409812/" target="_blank" class="menu-link px-2"><i class="bi bi-facebook fs-1 text-primary"></i></a>
+									</li>
+									<li class="menu-item">
+										<a href="https://www.instagram.com/mbkmuntad/" target="_blank" class="menu-link px-2"><i class="bi bi-instagram fs-1 text-warning" ></i></a>
+									</li>
+									<li class="menu-item">
+										<a href="https://www.youtube.com/channel/UC5OOozGHTxpqbZoMOZ_OwKA" target="_blank" class="menu-link px-2"><i class="bi bi-youtube fs-1 text-danger"></i></a>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div id="kt_scrolltop" class="scrolltop" data-kt-scrolltop="true">
+			<span class="svg-icon">
+				<i class="bi bi-arrow-up-circle-fill fs-2x"></i>
+			</span>
+		</div>
+		
+	
+
+		<script>
+			{% for msg in messages %}
+				{% if msg.tags == "success" %}
+				Swal.fire({
+					
+					icon: 'success',
+					title: 'Sukses',
+					text: '{{ msg }}',
+					timer: 4000,
+					showConfirmButton: false,
+				});
+				{% elif msg.tags == 'warning' %}
+				Swal.fire({
+					
+					icon: 'warning',
+					title: 'Warning',
+					text: '{{ msg }}',
+					timer: 2500,
+					showConfirmButton: false,
+				});
+				{% elif msg.tags == 'error' %}
+				Swal.fire({
+					
+					icon: 'error',
+					title: 'Error',
+					text: '{{ msg }}',
+					timer: 2500,
+					showConfirmButton: false,
+				});
+				{% endif %}
+
+			{% endfor %}
+		</script>
+		<script type="text/javascript">
+			$('.show_confirm').click(function(event) {
+				var form = $(this).closest("form");
+				var name = $(this).data("name");
+				event.preventDefault();
+				swal.fire({
+					title: "HAPUS Data?",
+					text: "Yakin Data Akan Dihapus.",
+					icon: "warning",
+					// buttons: true,
+					dangerMode: true,
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Hapus'
+				})
+				.then((willDelete) => {
+					if (willDelete.isConfirmed) {
+						form.submit();
+						Swal.fire('Sukses','Data Terhapus.','success');
+						// return redirect('tambah-tahun');
+					}
+				});
+			});
+
+			$('.confirm').click(function(event) {
+				var form = $(this).closest("form");
+				var name = $(this).data("name");
+				event.preventDefault();
+				swal.fire({
+					title: "Yakin?",
+					text: "Yakin Simpan Data
+					icon: "info",
+					// buttons: true,
+					dangerMode: true,
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yakin'
+				})
+				.then((willSave) => {
+					if (willSave.isConfirmed) {
+						form.submit();
+						Swal.fire('Sukses','Data Tersimpan','success');
+						// return redirect('tambah-tahun');
+					}
+				});
+			});
+		</script>
+		
+	</body>
+</html>

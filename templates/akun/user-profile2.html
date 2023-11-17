@@ -1,0 +1,618 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load extra_tag %}
+{% block content %}
+<style>
+    body{
+    margin-top:20px;
+    color: #1a202c;
+    text-align: left;
+    background-color: #e2e8f0;    
+}
+.main-body {
+    padding: 15px;
+}
+.card {
+    box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+}
+
+.card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 0 solid rgba(0,0,0,.250);
+    border-radius: .25rem;
+}
+
+.card-body {
+    flex: 1 1 auto;
+    min-height: 1px;
+    padding: 1rem;
+}
+
+.gutters-sm {
+    margin-right: -8px;
+    margin-left: -8px;
+}
+
+.gutters-sm>.col, .gutters-sm>[class*=col-] {
+    padding-right: 8px;
+    padding-left: 8px;
+}
+.mb-3, .my-3 {
+    margin-bottom: 1rem!important;
+}
+
+.bg-gray-300 {
+    background-color: #e2e8f0;
+}
+.h-100 {
+    height: 100%!important;
+}
+.shadow-none {
+    box-shadow: none!important;
+}
+</style>
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">{{judul}}</h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="{% url 'dashboard' %}" class="text-muted text-hover-primary">Home</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">{{judul}}</li>
+                
+				
+            </ul>
+        </div>
+
+        <div class="d-flex align-items-right gap-2 gap-lg-3">
+            <a href="{{request.META.HTTP_REFERER}}" class="btn btn-sm fw-bold btn-danger"><i class="bi bi-arrow-left-square fs-3"></i>Kembali</a>
+        </div>
+    </div>
+</div>
+{% if request.user|has_role:"MAHASISWA" %}
+<div id="kt_app_content_container" class="app-container container-xxl">
+        <div class="card mb-5 mb-xxl-8 bg-light-default rounded border-primary border border-dashed p-0">
+            <div class="main-body">
+            
+                <!-- Breadcrumb -->
+                
+                <!-- /Breadcrumb -->
+            
+                <div class="row gutters-sm">
+                    <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                        <div class="d-flex flex-column align-items-center text-center">
+                            {% if user.jk == "Laki-laki" and role == "MAHASISWA" %}
+                                <img src="{% static 'mahasiswa-l.jpeg' %}" alt="Admin" class="rounded-circle" width="150">
+                            {% elif user.jk == "Perempuan" and role == "MAHASISWA" %}
+                                <img src="{% static 'mahasiswa-p.png' %}" alt="Admin" class="rounded-circle" width="150">
+                            {% elif user.jk == "Laki-laki" and role == "DOSEN" %}
+                                <img src="{% static 'media/avatars/dosen-l.png' %}" alt="Admin" class="rounded-circle" width="150">
+                            {% elif user.jk == "Perempuan" and role == "DOSEN" %}
+                                <img src="{% static 'media/avatars/dosen-p.png' %}" alt="Admin" class="rounded-circle" width="150">
+                            {% else %}
+                                <img src="{% static 'media/avatars/dosen-l.png' %}" alt="image">
+                            {% endif %}
+                            
+                            <div class="mt-3">
+                            <h4>{{user.nama}}</h4>
+                            <p class="text-muted mb-1">{{user.nim}}</p>
+                            <p class="text-muted">{{user.program_studi}}</p>
+                            <span class="badge bg-primary"><h6 class="text-white my-auto">IPK : {{user.ipk}}</h6></span>
+                            <span class="badge bg-primary"><h6 class="text-white my-auto">SKS : {{user.total_sks}}</h6></span>
+                            <hr>
+                            <div class="btn-group d-flex mt-3">
+                                <button type="button" class="btn btn-info">Update IPK dan SKS</button>
+                                <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                                  <span class="visually-hidden">Toggle Dropdown</span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                  <li><a class="dropdown-item" href="{% url 'update-data-mahasiswa' user.id %}">User SIAKAD tekan ini, agar IPK dan SKS Sinkron dengan SIAT</a></li>
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><a class="dropdown-item" href="{% url 'update-ipk-sks-manual' %}">User SILA dapat memperbarui SKS dan IPKmu secara manual</a></li>
+                                  <li><hr class="dropdown-divider"></li>
+                                </ul>
+                              </div>
+
+                        </div>
+                        </div>
+                        </div>
+                    </div>
+                    
+                    </div>
+                    <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">Full Name</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.nama}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">Gender</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.jk}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.email}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">Phone</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.no_hp}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">IPK</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.ipk}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">SKS</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.total_sks}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">Nama Dosen Wali</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.nama_dpa | default:""}}
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">NIDN Dosen Wali</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.nidn_dpa | default:""}}
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">NIP Dosen Wali</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.nip_dpa | default:""}}
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Link G-Drive CV <i class="bi bi-question-circle text-info" id="cvHelperIcon"></i></h6>
+                                <small class="text-info" id="cvHelperText" style="display: none;">
+                                    Masukkan URL Google Drive yang terbuka akses untuk view file CV ATS Anda. Note: form ini hanya menerima link file bukan link folder
+                                </small>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                <a href="{{user.cv}}" target="_blank" rel="noopener noreferrer">{{user.cv| default:""}}</a>
+                            </div>
+                        </div>
+                        
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Link G-Drive Sertifikat Pendukung <i class="bi bi-question-circle text-info" id="sertifikatHelperIcon"></i></h6>
+                                <small class="text-info" id="sertifikatHelperText" style="display: none;">
+                                    Masukkan URL Google Drive yang terbuka akses untuk view file Sertifikat Pendukung Anda. Note: form ini hanya menerima link file bukan link folder. Jika kamu tidak memiliki sertifikat pendukung bisa mengosongkan form ini.
+                                </small>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                <a href="{{user.sertifikat}}" target="_blank" rel="noopener noreferrer">{{user.sertifikat| default:""}}</a>
+                            </div>
+                            
+                        </div>
+                        
+                        
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">No Rekening BNI/BSI</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.no_rek | default:""}}
+                            </div>
+                        </div>
+                        
+                        <hr>
+                         <div class="row">
+                            <div class="col-sm-3">
+                            <h6 class="mb-0">Nama Rekening BNI/BSI</h6>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                {{user.nama_rek | default:""}}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Link G-Drive SPTJM Liga MBKM <i class="bi bi-question-circle text-info" id="sptjmHelperIcon"></i></h6>
+                                <small class="text-info" id="sptjmHelperText" style="display: none;">
+                                    Masukkan URL Google Drive yang terbuka akses untuk view file SPTJM Liga MBKM Anda. Note: form ini hanya menerima link file bukan link folder. Template SPTJM Liga MBKM dapat didownload pada halaman Download SITAMPAN. Pastikan SPTJM dibubuhi Tanda tangan dan materai 10.000
+                                </small>
+                            </div>
+                            <div class="col-sm-9 text-muted">
+                                <a href="{{user.sptjm_liga_mbkm}}" target="_blank" rel="noopener noreferrer">{{user.sptjm_liga_mbkm| default:""}}</a>
+                            </div>
+                            
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-12">
+                            <a class="btn btn-info" target="__blank" href="{% url 'edit-profile' %}">Edit</a>
+                            </div>
+                        </div>
+                        </div>
+                        <script>
+                            document.getElementById('cvHelperIcon').addEventListener('click', function() {
+                              var cvHelperText = document.getElementById('cvHelperText');
+                              if (cvHelperText.style.display === 'none') {
+                                cvHelperText.style.display = 'block';
+                              } else {
+                                cvHelperText.style.display = 'none';
+                              }
+                            });
+                            
+                            document.getElementById('sertifikatHelperIcon').addEventListener('click', function() {
+                              var sertifikatHelperText = document.getElementById('sertifikatHelperText');
+                              if (sertifikatHelperText.style.display === 'none') {
+                                sertifikatHelperText.style.display = 'block';
+                              } else {
+                                sertifikatHelperText.style.display = 'none';
+                              }
+                            });
+
+                            document.getElementById('sptjmHelperIcon').addEventListener('click', function() {
+                              var sptjmHelperText = document.getElementById('sptjmHelperText');
+                              if (sptjmHelperText.style.display === 'none') {
+                                sptjmHelperText.style.display = 'block';
+                              } else {
+                                sptjmHelperText.style.display = 'none';
+                              }
+                            });
+                        </script>
+                    </div>
+
+                    
+
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+</div>
+{% elif request.user|has_role:"MAHASISWAINBOUND" %}
+<div id="kt_app_content_container" class="app-container container-xxl">
+    <div class="card mb-5 mb-xxl-8 bg-light-default rounded border-primary border border-dashed p-0">
+        <div class="main-body">
+            <div class="row gutters-sm">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                {% if user.jk == "Laki-laki" and role == "MAHASISWAINBOUND" %}
+                                    <img src="{% static 'mahasiswa-l.jpeg' %}" alt="Admin" class="rounded-circle" width="150">
+                                {% elif user.jk == "Perempuan" and role == "MAHASISWAINBOUND" %}
+                                    <img src="{% static 'mahasiswa-p.png' %}" alt="Admin" class="rounded-circle" width="150">
+                                {% elif user.jk == "Laki-laki" and role == "DOSEN" %}
+                                    <img src="{% static 'media/avatars/dosen-l.png' %}" alt="Admin" class="rounded-circle" width="150">
+                                {% elif user.jk == "Perempuan" and role == "DOSEN" %}
+                                    <img src="{% static 'media/avatars/dosen-p.png' %}" alt="Admin" class="rounded-circle" width="150">
+                                {% else %}
+                                    <img src="{% static 'media/avatars/dosen-l.png' %}" alt="image">
+                                {% endif %}
+                                
+                                <div class="mt-3">
+                                    <h4>{{user.nama}}</h4>
+                                    <p class="text-muted mb-1">{{request.user}}</p>
+                                    <p class="text-muted">{{user.program_studi_asal}}</p>
+                                    <span class="badge bg-primary"><h6 class="text-white my-auto">IPK : {{user.ipk | default:"0"}}</h6></span>
+                                    <span class="badge bg-primary"><h6 class="text-white my-auto">SKS : {{user.total_sks}}</h6></span>
+                                    <hr>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Nama Lengkap</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.nama}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">NIM</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.nim | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Jenis Kelamin</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.jk}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Tanggal lahir</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.tgl_lahir | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">NIK</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.nik | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.email}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Phone</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.no_hp}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">IPK</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.ipk }}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">SKS</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.total_sks | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Nomor HP Orang Tua</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.no_hp_orang_tua | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Program Studi Asal</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.program_studi_asal | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Fakultas Asal</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.fakultas_asal | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Kode PT Asal</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.kode_pt_asal | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+            
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">PT Asal</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.pt_asal | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Nama PIC PT Asal</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.pic_pt_asal | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                <h6 class="mb-0">Nomor HP PIC PT Asal</h6>
+                                </div>
+                                <div class="col-sm-9 text-muted">
+                                    {{user.no_hp_pic | default:""}}
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                <a class="btn btn-info" target="__blank" href="{% url 'edit-profile' %}">Edit</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif request.user|has_role:"DOSEN" %}
+<div id="kt_app_content_container" class="app-container container-xxl">
+    <div class="card mb-5 mb-xxl-8 bg-light-default rounded border-primary border border-dashed p-0">
+        <div class="main-body">
+        
+            <!-- Breadcrumb -->
+            
+            <!-- /Breadcrumb -->
+        
+            <div class="row gutters-sm">
+                <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                    <div class="d-flex flex-column align-items-center text-center">
+                        {% if user.jk == "Laki-laki" and role == "MAHASISWA" %}
+                            <img src="{% static 'media/avatars/mahasiswa-l.png' %}" alt="Admin" class="rounded-circle" width="150">
+                        {% elif user.jk == "Perempuan" and role == "MAHASISWA" %}
+                            <img src="{% static 'media/avatars/mahasiswa-p.png' %}" alt="Admin" class="rounded-circle" width="150">
+                        {% elif user.jk == "Laki-laki" and role == "DOSEN" %}
+                            <img src="{% static 'media/avatars/dosen-l.png' %}" alt="Admin" class="rounded-circle" width="150">
+                        {% elif user.jk == "Perempuan" and role == "DOSEN" %}
+                            <img src="{% static 'media/avatars/dosen-p.png' %}" alt="Admin" class="rounded-circle" width="150">
+                        {% else %}
+                            <img src="{% static 'media/avatars/dosen-l.png' %}" alt="image" class="rounded-circle" width="150">
+                        {% endif %}
+                        
+                        <div class="mt-3">
+                        <h4>{{user.nama}}</h4>
+                        <p class="text-muted mb-1">{{user.nidn}}</p>
+                        <p class="text-muted">{{user.program_studi}}</p>
+                        
+
+                    </div>
+                    </div>
+                    </div>
+                </div>
+                
+                </div>
+                <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <h6 class="mb-0">Full Name</h6>
+                        </div>
+                        <div class="col-sm-9 text-muted">
+                            {{user.nama}}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <h6 class="mb-0">NIDN</h6>
+                        </div>
+                        <div class="col-sm-9 text-muted">
+                            {{user.nidn}}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <h6 class="mb-0">Email</h6>
+                        </div>
+                        <div class="col-sm-9 text-muted">
+                            {{user.email}}
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                        <h6 class="mb-0">Phone</h6>
+                        </div>
+                        <div class="col-sm-9 text-muted">
+                            {{user.no_hp}}
+                        </div>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                        <a class="btn btn-info " target="__blank" href="{% url 'edit-profile' %}">Edit</a>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                
+
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock content %}

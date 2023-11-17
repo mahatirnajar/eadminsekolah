@@ -1,0 +1,64 @@
+{% load crispy_forms_tags %}
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>SIT-MBKM</title>
+	<!-- HTML5 Shim and Respond.js IE11 support of HTML5 elements and media queries -->
+	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+	<!--[if lt IE 11]>
+    	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    	<![endif]-->
+	<!-- Meta -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="description" content="Sistem Terpadu MBKM Universitas Tadulako" />
+	<meta name="keywords" content="mbkm">
+	<meta name="author" content="mbkm-untad" />
+	<!-- Favicon icon -->
+	<link rel="icon" href="{% static 'images/favicon.ico' %}" type="image/x-icon">
+
+	<!-- vendor css -->
+	<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+</head>
+
+<body>
+	<div class="col-lg-7 col-md-12">
+		<!-- support-section start -->
+		<div class="row">
+			<div class="col-sm-12">
+				<h1>Daftar Akun</h1>
+
+				<form action="" method="post">
+					{% csrf_token %}
+					{{reg_form | crispy}}
+					{{role_form | crispy}}
+					<input class="btn btn-success mt-3" type="submit" value="Submit">
+				</form>
+
+				{{reg_form.errors}}
+				{{role_form.errors}}
+			</div>
+		</div>
+	</div>
+
+	<!-- Required Js -->
+	<script src="{% static 'js/vendor-all.min.js' %}"></script>
+	<script src="{% static 'js/plugins/bootstrap.min.js' %}"></script>
+	<script src="{% static 'js/ripple.js' %}"></script>
+	<script src="{% static 'js/pcoded.js' %}"></script>
+
+	<!-- Apex Chart -->
+	<script src="{% static 'js/plugins/apexcharts.min.js' %}"></script>
+
+
+	<!-- custom-chart js -->
+	<script src="{% static 'js/pages/dashboard-main.js' %}"></script>
+</body>
+
+</html>

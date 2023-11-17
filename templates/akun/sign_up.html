@@ -1,0 +1,117 @@
+{% load static %}
+{% load extra_tag %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head><base href=""/>
+		<title>SITAMPAN</title>
+		<meta charset="utf-8" />
+		<meta name="description" content="SITAMPAN HITAM MANIS" />
+		<meta name="keywords" content="MBKM, SITAMPAN, UNTAD, TADULAKO, HITAM MANIS" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		
+		<link rel="shortcut icon" href="{% static 'media/logos/icon.png' %}" />
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
+		<link href="{% static 'plugins/global/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'css/style.bundle.css' %}" rel="stylesheet" type="text/css" />	
+		<style>	
+			#messages{
+				padding: 10px;
+				margin-top: 10px;
+				color: black;
+				font-size: medium;
+			}
+		</style>
+	</head>
+	
+	<body id="kt_body" class="app-blank app-blank bgi-size-cover bgi-position-center bgi-no-repeat">
+		<script>var defaultThemeMode = "light"; var themeMode; if ( document.documentElement ) { if ( document.documentElement.hasAttribute("data-theme-mode")) { themeMode = document.documentElement.getAttribute("data-theme-mode"); } else { if ( localStorage.getItem("data-theme") !== null ) { themeMode = localStorage.getItem("data-theme"); } else { themeMode = defaultThemeMode; } } if (themeMode === "system") { themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } document.documentElement.setAttribute("data-theme", themeMode); }
+		</script>
+		<div class="d-flex flex-column flex-root" id="kt_app_root">
+			<style>
+				body { background-image: url('{% static 'media/auth/bg4.jpg' %}'); }
+				[data-theme="dark"] body { background-image: url('{% static 'media/auth/bg4-dark.jpg' %}' ); }
+			</style>
+			<div class="d-flex flex-column flex-column-fluid flex-lg-row">
+				<div class="d-flex flex-center w-lg-50 pt-15 pt-lg-0 px-10">
+					<div class="d-flex flex-center flex-lg-start flex-column">
+						<a href="#!" class="mb-7">
+							<img alt="Logo" src="{% static 'media/logos/icon_bawah.png' %}" />
+						</a>
+						<h2 class="text-white fw-normal m-0">PUSBANG MBKM UNIVERSITAS TADULAKO</h2>
+					</div>
+				</div>
+				<div class="d-flex flex-center w-lg-50 p-10">
+					<div class="card rounded-3 w-md-550px">
+						<div class="card-body p-10 p-lg-20">
+
+							<form class="form w-100" novalidate="novalidate" id="kt_sign_in_form" data-kt-redirect-url="#"  method="POST" action="">
+								{% csrf_token %}
+								<div class="text-center mb-11">
+									<h1 class="text-dark fw-bolder mb-3">Register</h1>
+									<div class="text-gray-500 fw-semibold fs-6">Temukan Bakat dan Minatmu Untuk Masa Depan</div>
+								</div>
+								<div class="separator separator-content my-14">
+									<span class="w-125px text-gray-500 fw-semibold fs-7">SITAMPAN</span>
+								</div>
+								<div class="form-group mb-2">
+									<!-- <label class="floating-label" for="sebagai">Sebagai</label> -->
+									<select name="sebagai" class="form-control form-select">
+										<option value="" selected>Sebagai</option>
+										<option value="Mahasiswa">Mahasiswa</option>
+										<option value="Dosen">Dosen</option>
+										<option value="Unit MBKM">Unit MBKM</option>
+										<option value="Program Studi">Program Studi</option>
+									</select>
+								</div>
+								<div class="form-group mb-2">
+									<select name="sebagai" class="form-control form-select">
+										<option value="" selected>Fakultas</option>
+										<option value="Mahasiswa">Mahasiswa</option>
+										<option value="Dosen">Dosen</option>
+										<option value="Unit MBKM">Unit MBKM</option>
+										<option value="Program Studi">Program Studi</option>
+									</select>
+								</div>
+								<div class="form-group mb-2">
+									<select name="sebagai" class="form-control form-select">
+										<option value="" selected>Program Studi</option>
+										<option value="Mahasiswa">Mahasiswa</option>
+										<option value="Dosen">Dosen</option>
+										<option value="Unit MBKM">Unit MBKM</option>
+										<option value="Program Studi">Program Studi</option>
+									</select>
+								</div>
+								<div class="form-group mb-3">
+									<label class="floating-label" for="username">NIM</label>
+									<input type="text" class="form-control" id="username" name ="username">
+								</div>
+								<div class="form-group mb-3">
+									<label class="floating-label" for="username">Username</label>
+									<input type="text" class="form-control" id="username" name ="username">
+								</div>
+								<div class="form-group mb-4">
+									<label class="floating-label" for="Password">Password</label>
+									<input type="password" class="form-control" id="Password" name="password" >
+								</div>
+								<div class="form-check  text-start mb-4 mt-2">
+									<input type="checkbox" class="form-check-input" id="customCheck1">
+									<label class="form-check-label text-gray-500" for="customCheck1">Setuju untuk mendaftar dan mengikuti aturan</label>
+								</div>
+
+								<button class="btn btn-sm btn-primary mb-4" type="submit"><i class="bi bi-send-plus">&nbsp; Daftar</i></button>
+								<div class="text-gray-500 text-center fw-semibold fs-6">Sudah punya akun? 
+								<a href="{% url 'login-page' %}" class="link-primary">Login</a></div>
+								
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</div>
+		<script src="{% static 'plugins/global/plugins.bundle.js' %}"></script>
+		<script src="{% static 'js/scripts.bundle.js' %}"></script>
+		<script src="{% static 'js/custom/authentication/sign-in/general.js' %}"></script>
+	</body>
+</html>
